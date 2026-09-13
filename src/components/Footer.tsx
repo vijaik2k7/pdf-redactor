@@ -25,8 +25,10 @@ export const Footer: React.FC<FooterProps> = ({ theme }) => {
           href="https://buymeacoffee.com/vijaik2k7"
           target="_blank"
           rel="noopener noreferrer"
-          className={`inline-flex items-center gap-1.5 transition-colors ${
-            isDark ? 'text-amber-400 hover:text-amber-300' : 'text-amber-700 hover:text-amber-800'
+          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md border font-semibold transition-all ${
+            isDark
+              ? 'bg-zinc-900 hover:bg-zinc-800 border-zinc-800 text-amber-400 hover:text-amber-300'
+              : 'bg-[#e4ddd0] hover:bg-[#d8cebc] border-[#c8bca8] text-amber-800 shadow-sm'
           }`}
         >
           <Coffee className="w-3.5 h-3.5 text-amber-500" />

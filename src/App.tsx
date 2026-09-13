@@ -105,7 +105,7 @@ export default function App() {
 
   return (
     <div
-      className={`min-h-screen flex flex-col transition-colors duration-200 ${
+      className={`h-screen flex flex-col overflow-hidden transition-colors duration-200 ${
         isDark ? 'bg-[#09090b] text-zinc-100' : 'bg-[#eee8dd] text-stone-900'
       }`}
     >
