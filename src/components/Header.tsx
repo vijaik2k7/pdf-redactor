@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, RotateCcw, Keyboard, Sun, Moon, FileText } from 'lucide-react';
+import { ShieldCheck, RotateCcw, Keyboard, Sun, Moon, FileText, Coffee } from 'lucide-react';
 import { ThemeMode } from '../types/redact';
 
 interface HeaderProps {
@@ -64,6 +64,21 @@ export const Header: React.FC<HeaderProps> = ({
           <ShieldCheck className="w-3.5 h-3.5" />
           <span>Local processing — 0 Server Uploads</span>
         </div>
+
+        {/* Buy Me a Coffee Button */}
+        <a
+          href="https://buymeacoffee.com/vijaik2k7"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`p-2 border rounded-md transition-colors ${
+            isDark
+              ? 'bg-zinc-900 hover:bg-zinc-800 border-zinc-800 text-amber-400 hover:text-amber-300'
+              : 'bg-[#f4efe6] hover:bg-[#e4ddd0] border-[#d8cfbe] text-amber-700 hover:text-amber-800 shadow-sm'
+          }`}
+          title="Buy me a coffee"
+        >
+          <Coffee className="w-4 h-4 text-amber-500" />
+        </a>
 
         {/* Theme Toggle Button */}
         <button
