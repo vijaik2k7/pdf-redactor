@@ -3,8 +3,10 @@ import * as pdfjsLib from 'pdfjs-dist';
 import { RedactionBox, ThemeMode } from '../types/redact';
 import { TextItemWithBounds } from '../utils/patternScanner';
 
-// Configure pdfjs worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+import workerUrl from 'pdfjs-dist/build/pdf.worker.min.js?url';
+
+// Configure pdfjs worker via Vite bundled worker asset
+pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
 
 interface PdfViewportProps {
   pdfBuffer: ArrayBuffer;
@@ -39,7 +41,7 @@ export const PdfViewport: React.FC<PdfViewportProps> = ({
   // Load PDF document from ArrayBuffer
   useEffect(() => {
     let isCancelled = false;
-    pdfjsLib.getDocument({ data: pdfBuffer }).promise.then((doc) => {
+    pdfjsLib.getDocument({ data: pdfBuffer.slice(0) }).promise.then((doc) => {
       if (!isCancelled) {
         setPdfDoc(doc);
       }

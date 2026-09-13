@@ -64,7 +64,7 @@ export default function App() {
     if (!pdfBuffer) return;
     setIsExporting(true);
     try {
-      const redactedBytes = await exportRedactedPdf(pdfBuffer, boxes);
+      const redactedBytes = await exportRedactedPdf(pdfBuffer.slice(0), boxes);
       const blob = new Blob([new Uint8Array(redactedBytes)], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
