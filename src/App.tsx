@@ -6,6 +6,7 @@ import { Dropzone } from './components/Dropzone';
 import { Toolbar } from './components/Toolbar';
 import { PdfViewport } from './components/PdfViewport';
 import { ShortcutsModal } from './components/ShortcutsModal';
+import { Footer } from './components/Footer';
 import { useRedactState } from './hooks/useRedactState';
 import { scanTextItemsForPattern, TextItemWithBounds } from './utils/patternScanner';
 import { exportRedactedPdf } from './utils/pdfExporter';
@@ -157,6 +158,8 @@ export default function App() {
         onClose={() => setIsShortcutsOpen(false)}
         theme={theme}
       />
+
+      <Footer theme={theme} />
     </div>
   );
 }
