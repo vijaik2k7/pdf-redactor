@@ -7,6 +7,7 @@ import { Toolbar } from './components/Toolbar';
 import { PdfViewport } from './components/PdfViewport';
 import { ShortcutsModal } from './components/ShortcutsModal';
 import { Footer } from './components/Footer';
+import { PageSidebar } from './components/PageSidebar';
 import { useRedactState } from './hooks/useRedactState';
 import { scanTextItemsForPattern, TextItemWithBounds } from './utils/patternScanner';
 import { exportRedactedPdf } from './utils/pdfExporter';
@@ -49,7 +50,7 @@ export default function App() {
     const buffer = await file.arrayBuffer();
     setPdfBuffer(buffer);
 
-    const doc = await pdfjsLib.getDocument({ data: buffer }).promise;
+    const doc = await pdfjsLib.getDocument({ data: buffer.slice(0) }).promise;
     setNumPages(doc.numPages);
     setCurrentPage(1);
   };
@@ -136,16 +137,25 @@ export default function App() {
             onExport={handleExport}
             isExporting={isExporting}
           />
-          <PdfViewport
-            pdfBuffer={pdfBuffer}
-            currentPage={currentPage}
-            zoom={zoom}
-            boxes={boxes}
-            onAddBox={addBox}
-            onRemoveBox={removeBox}
-            theme={theme}
-            onTextItemsExtracted={setCurrentTextItems}
-          />
+          <div className="flex-1 flex overflow-hidden">
+            <PageSidebar
+              numPages={numPages}
+              currentPage={currentPage}
+              onPageSelect={setCurrentPage}
+              boxes={boxes}
+              theme={theme}
+            />
+            <PdfViewport
+              pdfBuffer={pdfBuffer}
+              currentPage={currentPage}
+              zoom={zoom}
+              boxes={boxes}
+              onAddBox={addBox}
+              onRemoveBox={removeBox}
+              theme={theme}
+              onTextItemsExtracted={setCurrentTextItems}
+            />
+          </div>
         </>
       ) : (
         <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-center items-center">

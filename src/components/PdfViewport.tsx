@@ -38,6 +38,8 @@ export const PdfViewport: React.FC<PdfViewportProps> = ({
 
   const isDark = theme === 'dark';
 
+  const renderTaskRef = useRef<any>(null);
+
   // Load PDF document from ArrayBuffer
   useEffect(() => {
     let isCancelled = false;
@@ -56,6 +58,15 @@ export const PdfViewport: React.FC<PdfViewportProps> = ({
     if (!pdfDoc || !canvasRef.current) return;
 
     let isCancelled = false;
+
+    // Cancel active page rendering task if still running
+    if (renderTaskRef.current) {
+      try {
+        renderTaskRef.current.cancel();
+      } catch (_) {}
+      renderTaskRef.current = null;
+    }
+
     pdfDoc.getPage(currentPage).then((page) => {
       if (isCancelled || !canvasRef.current) return;
 
@@ -73,8 +84,12 @@ export const PdfViewport: React.FC<PdfViewportProps> = ({
         viewport,
       };
 
-      page.render(renderContext).promise.then(() => {
+      const renderTask = page.render(renderContext);
+      renderTaskRef.current = renderTask;
+
+      renderTask.promise.then(() => {
         if (isCancelled) return;
+        renderTaskRef.current = null;
 
         // Extract text bounds for smart pattern matching
         page.getTextContent().then((textContent) => {
@@ -93,11 +108,23 @@ export const PdfViewport: React.FC<PdfViewportProps> = ({
             onTextItemsExtracted(textItems);
           }
         });
+      }).catch((err: any) => {
+        if (err?.name !== 'RenderingCancelledException') {
+          console.error('Render page error:', err);
+        }
       });
+    }).catch((err) => {
+      console.error('Failed to get PDF page:', currentPage, err);
     });
 
     return () => {
       isCancelled = true;
+      if (renderTaskRef.current) {
+        try {
+          renderTaskRef.current.cancel();
+        } catch (_) {}
+        renderTaskRef.current = null;
+      }
     };
   }, [pdfDoc, currentPage, zoom, onTextItemsExtracted]);
 
